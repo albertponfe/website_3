@@ -1,317 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy 22nd Birthday, Ece</title>
-  <meta name="description" content="A birthday scavenger hunt for Ece's 22nd — follow the clues, find the secrets."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>The Archives of Ece — XXII</title>
+  <meta name="description" content="A cryptic birthday scavenger hunt for Ece's 22nd." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&family=Cinzel:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
-  <!-- Paper grain overlay -->
   <div class="paper-grain" aria-hidden="true"></div>
-
-  <!-- Star canvas -->
   <canvas id="starCanvas"></canvas>
-
-  <!-- Confetti -->
+  <!-- SVG overlay used globally for drawing connections -->
+  <svg id="drawingCanvas" class="drawing-layer">
+    <line id="connectionLine" x1="0" y1="0" x2="0" y2="0" />
+  </svg>
   <div id="confettiContainer" aria-hidden="true"></div>
 
-  <!-- Clue overlay — styled as an old wax-sealed letter -->
+  <!-- WRONG PICK TOAST -->
+  <div id="wrongPickToast" class="wrong-toast hidden" aria-live="polite">— Incorrect sequence. —</div>
+
+  <!-- CLUE OVERLAY -->
   <div id="clueOverlay" class="overlay hidden" role="dialog" aria-modal="true">
     <div class="letter-card">
       <div class="letter-seal" id="clueIcon">✦</div>
-      <p class="letter-from">A Clue Has Been Discovered</p>
+      <p class="letter-from">A Trial Revealed</p>
       <h2 class="letter-title" id="clueTitle"></h2>
       <div class="letter-divider">— ✦ —</div>
       <p class="letter-body" id="clueBody"></p>
-      <button class="btn-wax" id="clueOkBtn">I Shall Search</button>
+      <button class="btn-wax" id="clueOkBtn">I Shall Begin</button>
     </div>
   </div>
 
-  <!-- ══════════════════════
-       SCREEN 0: LANDING
-  ══════════════════════ -->
+  <!-- ═══════════════════════════════════════
+     SCREEN 0 — LANDING
+═══════════════════════════════════════ -->
   <section id="screen-landing" class="screen active">
     <div class="landing-inner">
-
       <div class="ornament-top" aria-hidden="true">— ✦ ✦ ✦ —</div>
-
       <div class="wax-seal" aria-label="22nd birthday seal">
         <span class="seal-number">22</span>
         <svg class="seal-ring-svg" viewBox="0 0 120 120">
-          <path id="circlePath" d="M 60,60 m -45,0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0" fill="none"/>
+          <path id="circlePath" d="M 60,60 m -45,0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0" fill="none" />
           <text class="seal-ring-text">
             <textPath href="#circlePath" startOffset="0%">✦ BIRTHDAY ✦ MMXXVI ✦ ECE ✦</textPath>
           </text>
         </svg>
       </div>
-
       <h1 class="landing-title">
-        <span class="landing-small">In Celebration of</span>
+        <span class="landing-small">The Private Archives of</span>
         <span class="landing-name dancing-font">Ece</span>
       </h1>
-
       <p class="landing-body">
-        A trail has been laid, from first to last.<br>
-        Follow the clues. Watch the missives.<br>
+        The path is obscured by shadows and decoys.<br>
+        Only those who truly know the journey may pass.<br>
         <em>The final secret belongs only to the worthy.</em>
       </p>
-
       <div class="ornament-mid" aria-hidden="true">⸻</div>
-
-      <button class="btn-start" id="startBtn">Begin the Hunt</button>
-
-      <p class="landing-footer">Five missives · Four clues · One final secret</p>
+      <button class="btn-start" id="startBtn">Begin the Extraction</button>
+      <p class="landing-footer">Four Folios · One Final Secret</p>
     </div>
   </section>
 
-  <!-- ══════════════════════
-       SCREEN 1 — VIDEO 1
-  ══════════════════════ -->
+  <!-- ═══════════════════════════════════════
+     SCREEN 1 — FOLIO I: RSF Word Search
+═══════════════════════════════════════ -->
   <section id="screen-1" class="screen hidden">
     <div class="parchment-card">
-
       <header class="stage-header">
-        <div class="chapter-label">— Chapter I —</div>
-        <div class="progress-track"><div class="progress-fill" style="width:20%"></div></div>
+        <div class="chapter-label">— Folio I —</div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:25%"></div>
+        </div>
       </header>
 
       <h2 class="stage-title">The First Missive</h2>
-      <p class="stage-sub">Someone who watched you grow has set this letter aside for you.</p>
+      <p class="stage-sub">Before the journey unlocks, you must remember the origins of your strength.</p>
 
-      <div class="video-frame" id="video1">
+      <!-- Hidden until puzzle is solved -->
+      <div class="video-frame hidden" id="videoContainer1">
         <div class="video-placeholder">
           <div class="play-medallion">▶</div>
-          <p class="video-label">Missive No. 1</p>
+          <p class="video-label">RSF Missives</p>
           <p class="video-sub">Awaiting your viewing…</p>
         </div>
-        <!-- Replace with: <video src="video1.mp4" controls></video> -->
+        <!-- <video src="rsf_video.mp4" controls></video> -->
       </div>
 
-      <div class="watched-row">
-        <button class="btn-watched" id="watched1Btn">I have read it — reveal the clue</button>
-      </div>
-
-      <!-- HIDDEN ANSWER: RSF monogram — blends as decorative printer's mark -->
-      <div id="rsfBadge" class="hidden-element rsf-badge" data-stage="1" tabindex="0" role="button" aria-label="Hidden element">
-        <div class="rsf-inner">
-          <span class="rsf-letters">RSF</span>
-          <div class="rsf-ornament">✦</div>
+      <!-- Trial section, starts hidden until 'reveal' is triggered in JS -->
+      <div id="stage1Trial" class="trial-block">
+        <div class="trial-header">
+          <p class="trial-decree">The Hidden Ledger</p>
+          <p class="trial-instruction">
+            Within this registry lie the names of <strong>three</strong> souls who walked the iron temple with you.
+            Find them — forwards, backwards, or diagonally.
+          </p>
         </div>
-      </div>
 
+        <div class="word-search-wrap">
+          <div class="word-grid grid-13" id="wordGrid"></div>
+          <div class="word-status">
+            Recovered: <span id="wordsFoundCount">0</span> / 3
+            <div class="found-words-list" id="foundWordsList"></div>
+          </div>
+        </div>
+
+        <button class="btn-watched hidden" id="proceed1Btn">Examine the records</button>
+      </div>
     </div>
   </section>
 
-  <!-- ══════════════════════
-       SCREEN 2 — VIDEO 2
-  ══════════════════════ -->
+  <!-- ═══════════════════════════════════════
+     SCREEN 2 — FOLIO II: Berkeley Path
+═══════════════════════════════════════ -->
   <section id="screen-2" class="screen hidden">
     <div class="parchment-card">
-
       <header class="stage-header">
-        <div class="chapter-label">— Chapter II —</div>
-        <div class="progress-track"><div class="progress-fill" style="width:40%"></div></div>
+        <div class="chapter-label">— Folio II —</div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:50%"></div>
+        </div>
       </header>
 
-      <!-- HIDDEN ANSWER: Bridge engraving — placed before video as a 'chapter vignette' -->
-      <div id="bosphorusBadge" class="hidden-element bosphorus-badge" data-stage="2" tabindex="0" role="button" aria-label="Hidden element">
-        <svg class="bridge-svg" viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
-          <rect x="28" y="10" width="7" height="50" fill="currentColor"/>
-          <rect x="165" y="10" width="7" height="50" fill="currentColor"/>
-          <path d="M31 12 Q100 44 170 12" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          <path d="M31 12 Q100 50 170 12" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.5"/>
-          <rect x="18" y="54" width="164" height="5" fill="currentColor"/>
-          <line x1="60"  y1="54" x2="63"  y2="30" stroke="currentColor" stroke-width="1.2"/>
-          <line x1="82"  y1="54" x2="83"  y2="23" stroke="currentColor" stroke-width="1.2"/>
-          <line x1="100" y1="54" x2="100" y2="21" stroke="currentColor" stroke-width="1.2"/>
-          <line x1="118" y1="54" x2="117" y2="23" stroke="currentColor" stroke-width="1.2"/>
-          <line x1="140" y1="54" x2="137" y2="30" stroke="currentColor" stroke-width="1.2"/>
-          <!-- Water lines -->
-          <line x1="18" y1="62" x2="182" y2="62" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
-          <line x1="18" y1="66" x2="182" y2="66" stroke="currentColor" stroke-width="0.8" opacity="0.25"/>
-        </svg>
-        <p class="bridge-label">The Crossing</p>
-      </div>
+      <h2 class="stage-title">The Golden Bear's Path</h2>
+      <p class="stage-sub">Four years of footsteps mapped across the stone. Piece together the daily march.</p>
 
-      <h2 class="stage-title">The Second Missive</h2>
-      <p class="stage-sub">Those who trained beside you in iron and sweat have left their mark.</p>
-
-      <div class="video-frame" id="video2">
+      <div class="video-frame hidden" id="videoContainer2">
         <div class="video-placeholder">
           <div class="play-medallion">▶</div>
-          <p class="video-label">Missive No. 2</p>
-          <p class="video-sub">Awaiting your viewing…</p>
+          <p class="video-label">Berkeley Missives</p>
         </div>
       </div>
 
-      <div class="watched-row">
-        <button class="btn-watched" id="watched2Btn">I have read it — reveal the clue</button>
-      </div>
+      <div id="stage2Trial" class="trial-block">
+        <div class="trial-header">
+          <p class="trial-decree">The Architectural Survey</p>
+          <p class="trial-instruction">
+            Order her true path from her house all the way to Menchies. Drag the landmarks into the correct sequence.
+          </p>
+        </div>
 
+        <div class="drag-container">
+          <!-- The unassigned locations -->
+          <div class="drag-bank" id="dragBank">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- The ordered slots -->
+          <div class="drag-track" id="dragTrack">
+            <!-- Populated by JS (9 slots) -->
+          </div>
+        </div>
+
+        <button class="btn-watched hidden" id="proceed2Btn">Unlock the archives</button>
+      </div>
     </div>
   </section>
 
-  <!-- ══════════════════════
-       SCREEN 3 — VIDEO 3
-  ══════════════════════ -->
+  <!-- ═══════════════════════════════════════
+     SCREEN 3 — FOLIO III: Turkey Map
+═══════════════════════════════════════ -->
   <section id="screen-3" class="screen hidden">
     <div class="parchment-card">
-
       <header class="stage-header">
-        <div class="chapter-label">— Chapter III —</div>
-        <div class="progress-track"><div class="progress-fill" style="width:60%"></div></div>
+        <div class="chapter-label">— Folio III —</div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:75%"></div>
+        </div>
       </header>
 
-      <h2 class="stage-title">The Third Missive</h2>
-      <p class="stage-sub">From one world to another she crossed — and left a mark on all she met.</p>
+      <h2 class="stage-title">The Continental Passage</h2>
+      <p class="stage-sub">From the coast to the strait, her life spanned ancient horizons.</p>
 
-      <div class="video-frame" id="video3">
+      <div class="video-frame hidden" id="videoContainer3">
         <div class="video-placeholder">
           <div class="play-medallion">▶</div>
-          <p class="video-label">Missive No. 3</p>
-          <p class="video-sub">Awaiting your viewing…</p>
+          <p class="video-label">Turkish Missives</p>
         </div>
       </div>
 
-      <div class="watched-row">
-        <button class="btn-watched" id="watched3Btn">I have read it — reveal the clue</button>
-      </div>
-
-      <!-- HIDDEN ANSWER: "22" constellation — styled as an astronomical footnote -->
-      <div id="starField" class="hidden-element star-field" data-stage="3" tabindex="0" role="button" aria-label="Hidden element">
-        <div class="constellation-inner">
-          <div class="constellation-dots" id="constellationDots"></div>
-          <span class="constellation-22">XXII</span>
+      <div id="stage3Trial" class="trial-block">
+        <div class="trial-header">
+          <p class="trial-decree">The Cartographer's Trace</p>
+          <p class="trial-instruction">
+            Connect her origins to her crossing. Press upon the symbol of her birth, drag, and unite it with the symbol
+            of the strait.
+          </p>
         </div>
-        <p class="constellation-label">Anno Domini · Fig. XXII</p>
-      </div>
 
+        <div class="map-board" id="turkeyMap">
+          <!-- Decoys and targets populated with specific IDs in JS to attach logic -->
+          <div class="map-item decoy" style="top:15%;left:15%;">🎈<p>Cappadocia</p>
+          </div>
+          <div class="map-item decoy" style="top:75%;left:25%;">🏺<p>Ephesus</p>
+          </div>
+          <div class="map-item target" id="loc-izmir" style="top:45%;left:10%;">🏛️<p>Izmir Tower</p>
+          </div>
+          <div class="map-item decoy" style="top:25%;left:55%;">🦁<p>Ankara</p>
+          </div>
+          <div class="map-item target" id="loc-istanbul" style="top:35%;left:80%;">🌉<p>Bosphorus</p>
+          </div>
+          <div class="map-item decoy" style="top:80%;left:85%;">⛰️<p>Mt. Ararat</p>
+          </div>
+        </div>
+
+        <button class="btn-watched hidden" id="proceed3Btn">Watch the memories</button>
+      </div>
     </div>
   </section>
 
-  <!-- ══════════════════════
-       SCREEN 4 — VIDEO 4
-  ══════════════════════ -->
+  <!-- ═══════════════════════════════════════
+     SCREEN 4 — THE SEALED ENTRY: Chachacha & Albert
+═══════════════════════════════════════ -->
   <section id="screen-4" class="screen hidden">
-    <div class="parchment-card">
-
-      <header class="stage-header">
-        <div class="chapter-label">— Chapter IV —</div>
-        <div class="progress-track"><div class="progress-fill" style="width:80%"></div></div>
-      </header>
-
-      <h2 class="stage-title">The Fourth Missive</h2>
-      <p class="stage-sub">The Golden Bear's halls shaped her into the woman she is today.</p>
-
-      <div class="video-frame" id="video4">
-        <div class="video-placeholder">
-          <div class="play-medallion">▶</div>
-          <p class="video-label">Missive No. 4</p>
-          <p class="video-sub">Awaiting your viewing…</p>
-        </div>
-      </div>
-
-      <div class="watched-row">
-        <button class="btn-watched" id="watched4Btn">I have read it — reveal the clue</button>
-      </div>
-
-      <!-- HIDDEN ANSWER: Sather Gate — styled as architectural sketch colophon -->
-      <div id="satherGate" class="hidden-element sather-gate" data-stage="4" tabindex="0" role="button" aria-label="Hidden element">
-        <svg class="gate-svg" viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="34" width="14" height="72" rx="1" fill="currentColor"/>
-          <rect x="136" y="34" width="14" height="72" rx="1" fill="currentColor"/>
-          <rect x="40" y="50" width="10" height="56" rx="1" fill="currentColor"/>
-          <rect x="110" y="50" width="10" height="56" rx="1" fill="currentColor"/>
-          <path d="M10 34 Q80 -8 150 34" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <path d="M40 50 Q80 20 120 50" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="80" cy="6" r="6" fill="currentColor"/>
-          <rect x="5" y="104" width="150" height="4" rx="1" fill="currentColor"/>
-          <!-- stone texture lines -->
-          <line x1="10" y1="60" x2="24" y2="60" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
-          <line x1="10" y1="76" x2="24" y2="76" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
-          <line x1="136" y1="60" x2="150" y2="60" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
-          <line x1="136" y1="76" x2="150" y2="76" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
-        </svg>
-        <p class="gate-label">Arch of Futures</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════
-       SCREEN 5 — GRAND FINALE
-  ══════════════════════════════════ -->
-  <section id="screen-5" class="screen hidden">
     <div class="parchment-card finale-card">
-
       <header class="stage-header">
-        <div class="chapter-label finale-chapter">— Epilogue —</div>
-        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="chapter-label finale-chapter">— The Sealed Entry —</div>
+        <div class="progress-track">
+          <div class="progress-fill finale-bar" style="width:100%"></div>
+        </div>
       </header>
 
-      <div class="finale-seal">
+      <h2 class="stage-title finale-title dancing-font">You made it, Ece…</h2>
+
+      <div class="finale-seal-block">
         <div class="candles-row" aria-hidden="true">🕯🕯🕯🕯🕯🕯🕯🕯🕯🕯🕯</div>
         <p class="big-22 dancing-font">22</p>
         <p class="finale-message">
           Happy Birthday, <strong>Ece.</strong><br>
-          From Istanbul's shores to the Golden Gate —<br>
-          we are grateful for every year of you.
+          From Istanbul's shores to the Golden Gate — we are grateful for every year of you. 🌙
         </p>
         <div class="finale-flags">🇹🇷 ✦ 🐻</div>
       </div>
 
       <div class="ornament-mid" aria-hidden="true">⸻</div>
 
-      <!-- CHACHACHA CLUE — Victorian scroll syle -->
       <div class="chacha-clue" id="chachaClue">
         <div class="chacha-seal">💃</div>
         <p class="chacha-decree">Final Decree</p>
         <p class="chacha-instruction">
-          "Now show me you remember how to dance chachacha
-          with the arrows if you want to finish this."
+          "Now show me you remember how to dance chachacha with the arrows if you want to finish this."
         </p>
-
-        <!-- Key sequence: boxes start EMPTY; symbol revealed on correct press -->
-        <div class="key-sequence" id="keySequence" aria-label="Sequence tracker">
+        <!-- Sequence: ↓ ← → → → ↑ ↓ ← ← ← -->
+        <div class="key-sequence" id="keySequence">
           <div class="key-step" data-step="0" data-symbol="↓"></div>
           <div class="key-step" data-step="1" data-symbol="←"></div>
           <div class="key-step" data-step="2" data-symbol="→"></div>
           <div class="key-step" data-step="3" data-symbol="→"></div>
           <div class="key-step" data-step="4" data-symbol="→"></div>
           <div class="key-step" data-step="5" data-symbol="↑"></div>
-          <div class="key-step" data-step="6" data-symbol="␣"></div>
+          <div class="key-step" data-step="6" data-symbol="↓"></div>
           <div class="key-step" data-step="7" data-symbol="←"></div>
           <div class="key-step" data-step="8" data-symbol="←"></div>
           <div class="key-step" data-step="9" data-symbol="←"></div>
         </div>
-
-        <p class="chacha-wrong hidden" id="chachaWrong">— Begin again. —</p>
+        <p class="chacha-wrong hidden" id="chachaWrong">— Repeat the Rhythm —</p>
       </div>
 
-      <!-- Final video: hidden until sequence complete -->
+      <!-- Hidden until seq done -->
       <div class="final-video-reveal hidden" id="finalVideoReveal">
-        <p class="reveal-inscription">The Final Missive</p>
-        <div class="ornament-mid" aria-hidden="true">— ✦ —</div>
-        <div class="video-frame finale-frame" id="video5">
+        <p class="reveal-inscription">The Final Confession</p>
+        <div class="ornament-mid">— ✦ —</div>
+        <div class="video-frame finale-frame">
           <div class="video-placeholder finale-placeholder">
             <div class="play-medallion finale-medallion">▶</div>
             <p class="video-label">The Last Letter 💌</p>
             <p class="video-sub">This one is only for you.</p>
           </div>
-          <!-- Replace with: <video src="video5.mp4" controls></video> -->
+          <!-- <video src="albert_video.mp4" controls></video> -->
+        </div>
+
+        <div class="finale-celebration">
+          <p class="finale-big-wish dancing-font">İyi ki doğdun, Ece!</p>
+          <button class="btn-start" id="finishExperienceBtn" style="margin-top: 1rem;">Finish Experience</button>
         </div>
       </div>
-
-      <button class="btn-restart" id="restartBtn">↩ Relive the journey</button>
-
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════
+     EXPLOSION LIGHT EFFECT OUTRO
+═══════════════════════════════════════ -->
+  <div id="outroWhiteout" class="outro-whiteout hidden">
+    <div class="outro-content">
+      <a href="https://albertponfe.github.io/website_2/" class="btn-beyond" id="travelLifeBtn">Travel to other life</a>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
+
 </html>
