@@ -457,5 +457,48 @@ function launchConfetti() {
   setTimeout(() => clearInterval(iv), 8000);
 }
 
+/* ─────────────────────────────────────────────────
+   8.  SKIP SEQUENCE
+───────────────────────────────────────────────── */
+const SKIP_SEQ = ['s', 'k', 'i', 'p'];
+let skipSeqIndex = 0;
+
+document.addEventListener('keydown', e => {
+  if (!e.key) return;
+  if (e.key.toLowerCase() === SKIP_SEQ[skipSeqIndex]) {
+    skipSeqIndex++;
+    if (skipSeqIndex === SKIP_SEQ.length) {
+      skipSeqIndex = 0;
+      const activeScreen = document.querySelector('.screen:not(.hidden)');
+      if (activeScreen) {
+        if (activeScreen.id === 'screen-1') {
+          const trial = document.getElementById('stage1Trial');
+          if (trial && !trial.classList.contains('hidden')) {
+            document.getElementById('proceed1Btn').click();
+          }
+        } else if (activeScreen.id === 'screen-2') {
+          const trial = document.getElementById('stage2Trial');
+          if (trial && !trial.classList.contains('hidden')) {
+            document.getElementById('proceed2Btn').click();
+          }
+        } else if (activeScreen.id === 'screen-3') {
+          const trial = document.getElementById('stage3Trial');
+          if (trial && !trial.classList.contains('hidden')) {
+            document.getElementById('proceed3Btn').click();
+          }
+        } else if (activeScreen.id === 'screen-4') {
+          if (!chachaUnlocked) {
+            chachaUnlocked = true;
+            document.querySelectorAll('.key-step').forEach(s => s.classList.add('done'));
+            unlockFinalVideo();
+          }
+        }
+      }
+    }
+  } else {
+    skipSeqIndex = e.key.toLowerCase() === 's' ? 1 : 0;
+  }
+});
+
 // Start
 showScreen('screen-landing');
