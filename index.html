@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>The Archives of Ece — XXII</title>
-  <meta name="description" content="A cryptic birthday scavenger hunt for Ece's 22nd." />
+  <meta name="description" content="A birthday scavenger hunt for Ece's 22nd." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&family=Cinzel:wght@400;600&display=swap"
@@ -17,9 +17,8 @@
 
   <div class="paper-grain" aria-hidden="true"></div>
   <canvas id="starCanvas"></canvas>
-  <!-- SVG overlay used globally for drawing connections -->
   <svg id="drawingCanvas" class="drawing-layer">
-    <line id="connectionLine" x1="0" y1="0" x2="0" y2="0" />
+    <path id="connectionLine" d="" />
   </svg>
   <div id="confettiContainer" aria-hidden="true"></div>
 
@@ -133,7 +132,9 @@
 
       <div id="videoContainer2" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%;">
         <div class="video-frame" style="margin-bottom: 0;">
-          <iframe src="https://drive.google.com/file/d/1gcHwI2kAeENIZ5SrgTNJVByQYq6iN5f0/preview" allow="autoplay; fullscreen" width="100%" style="aspect-ratio: 16/9; border: none; display: block; border-radius: 4px;"></iframe>
+          <iframe src="https://drive.google.com/file/d/1gcHwI2kAeENIZ5SrgTNJVByQYq6iN5f0/preview"
+            allow="autoplay; fullscreen" width="100%"
+            style="aspect-ratio: 16/9; border: none; display: block; border-radius: 4px;"></iframe>
         </div>
         <div class="video-frame" style="margin-bottom: 0;">
           <div class="video-placeholder">
@@ -148,7 +149,7 @@
         <div class="trial-header">
           <p class="trial-decree">The Architectural Survey</p>
           <p class="trial-instruction">
-            Order her true path from her house all the way to Menchies. Drag the landmarks into the correct sequence.
+            Order the true path destiny has prepared for her. Drag the landmarks into the correct sequence.
           </p>
         </div>
 
@@ -181,12 +182,17 @@
         </div>
       </header>
 
-      <h2 class="stage-title">The Continental Passage</h2>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem;">
+        <h2 class="stage-title">The Continental Passage</h2>
+        <div class="bridge-icon target" id="loc-istanbul" style="font-size: 2.2rem; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));" title="The Passage">🌉</div>
+      </div>
       <p class="stage-sub">From the coast to the strait, her life spanned ancient horizons.</p>
 
       <div id="videoContainer3" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%;">
         <div class="video-frame" style="margin-bottom: 0;">
-          <iframe src="https://drive.google.com/file/d/1x4WEUxFa9bl_DYk2e471mMJOiTsDpe1N/preview" allow="autoplay; fullscreen" width="100%" style="aspect-ratio: 16/9; border: none; display: block; border-radius: 4px;"></iframe>
+          <iframe src="https://drive.google.com/file/d/1x4WEUxFa9bl_DYk2e471mMJOiTsDpe1N/preview"
+            allow="autoplay; fullscreen" width="100%"
+            style="aspect-ratio: 16/9; border: none; display: block; border-radius: 4px;"></iframe>
         </div>
         <div class="video-frame" style="margin-bottom: 0;">
           <div class="video-placeholder">
@@ -208,18 +214,22 @@
 
         <div class="map-board" id="turkeyMap">
           <!-- Decoys and targets populated with specific IDs in JS to attach logic -->
-          <div class="map-item decoy" style="top:15%;left:15%;">🎈<p>Cappadocia</p>
-          </div>
-          <div class="map-item decoy" style="top:75%;left:25%;">🏺<p>Ephesus</p>
-          </div>
-          <div class="map-item target" id="loc-izmir" style="top:45%;left:10%;">🏛️<p>Izmir Tower</p>
-          </div>
-          <div class="map-item decoy" style="top:25%;left:55%;">🦁<p>Ankara</p>
-          </div>
-          <div class="map-item target" id="loc-istanbul" style="top:35%;left:80%;">🌉<p>Bosphorus</p>
-          </div>
-          <div class="map-item decoy" style="top:80%;left:85%;">⛰️<p>Mt. Ararat</p>
-          </div>
+          <div class="map-item decoy" style="top:15%;left:15%;">🎈<p>Cappadocia</p></div>
+          <div class="map-item decoy" style="top:75%;left:25%;">🏺<p>Ephesus</p></div>
+          <div class="map-item target" id="loc-izmir" style="top:45%;left:10%;">🏛️<p>Izmir Tower</p></div>
+          <div class="map-item decoy" style="top:25%;left:55%;">🦁<p>Ankara</p></div>
+          <div class="map-item decoy" style="top:80%;left:85%;">⛰️<p>Mt. Ararat</p></div>
+          <!-- Additional Decoys -->
+          <div class="map-item decoy" style="top:10%;left:80%;">🗼<p>Paris</p></div>
+          <div class="map-item decoy" style="top:60%;left:75%;">🏟️<p>Rome</p></div>
+          <div class="map-item decoy" style="top:85%;left:45%;">🔺<p>Pyramids</p></div>
+          <div class="map-item decoy" style="top:35%;left:35%;">🗽<p>New York</p></div>
+          <div class="map-item decoy" style="top:50%;left:90%;">⛩️<p>Kyoto</p></div>
+          <div class="map-item decoy" style="top:20%;left:35%;">🎡<p>London</p></div>
+          <div class="map-item decoy" style="top:65%;left:15%;">🏰<p>Madrid</p></div>
+          <div class="map-item decoy" style="top:90%;left:10%;">🏔️<p>Alps</p></div>
+          <div class="map-item decoy" style="top:30%;left:90%;">🌵<p>Sahara</p></div>
+          <div class="map-item decoy" style="top:5%;left:50%;">❄️<p>Oslo</p></div>
         </div>
 
         <button class="btn-watched hidden" id="proceed3Btn">Watch the memories</button>

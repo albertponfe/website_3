@@ -250,6 +250,7 @@ function initTurkeyMap() {
   if (!drawingCanvas || !izmir || !istanbul) return;
 
   let isDrawingMap = false;
+  let pathData = '';
 
   const getElementCenter = (el) => {
     const rect = el.getBoundingClientRect();
@@ -257,24 +258,50 @@ function initTurkeyMap() {
   };
 
   // Start on Izmir
-  izmir.addEventListener('mousedown', (e) => { e.preventDefault(); startLine(); });
-  izmir.addEventListener('touchstart', (e) => { e.preventDefault(); startLine(); }, { passive: false });
+  izmir.addEventListener('mousedown', (e) => { e.preventDefault(); startLine(e.clientX, e.clientY); });
+  izmir.addEventListener('touchstart', (e) => { e.preventDefault(); const t = e.touches[0]; startLine(t.clientX, t.clientY); }, { passive: false });
 
-  function startLine() {
+  function startLine(startX, startY) {
     isDrawingMap = true;
     line.classList.add('drawing');
-    line.classList.remove('success');
-    const startPos = getElementCenter(izmir);
-    line.setAttribute('x1', startPos.x); line.setAttribute('y1', startPos.y);
-    line.setAttribute('x2', startPos.x); line.setAttribute('y2', startPos.y);
+    line.classList.remove('success', 'hidden');
+    pathData = `M ${startX} ${startY}`;
+    line.setAttribute('d', pathData);
+  }
+
+  function failDrawing() {
+    isDrawingMap = false;
+    line.classList.remove('drawing'); // hide line
+    line.setAttribute('d', '');       // clear path
+    showWrongPickToast("— The path must not wander. —");
   }
 
   // Move
   document.addEventListener('mousemove', (e) => {
-    if (isDrawingMap) { line.setAttribute('x2', e.clientX); line.setAttribute('y2', e.clientY); }
+    if (isDrawingMap) {
+      pathData += ` L ${e.clientX} ${e.clientY}`;
+      line.setAttribute('d', pathData);
+
+      // Check if hitting decoy
+      const elUnder = document.elementFromPoint(e.clientX, e.clientY);
+      if (elUnder && elUnder.closest('.map-item.decoy')) {
+        failDrawing();
+      }
+    }
   });
+
   document.addEventListener('touchmove', (e) => {
-    if (isDrawingMap) { const t = e.touches[0]; line.setAttribute('x2', t.clientX); line.setAttribute('y2', t.clientY); }
+    if (isDrawingMap) {
+      const t = e.touches[0];
+      pathData += ` L ${t.clientX} ${t.clientY}`;
+      line.setAttribute('d', pathData);
+
+      // Check if hitting decoy
+      const elUnder = document.elementFromPoint(t.clientX, t.clientY);
+      if (elUnder && elUnder.closest('.map-item.decoy')) {
+        failDrawing();
+      }
+    }
   }, { passive: false });
 
   // Release
@@ -286,16 +313,11 @@ function initTurkeyMap() {
     const elUnder = document.elementFromPoint(cursorX, cursorY);
     if (elUnder && (elUnder === istanbul || istanbul.contains(elUnder))) {
       // Success
-      const endPos = getElementCenter(istanbul);
-      line.setAttribute('x2', endPos.x); line.setAttribute('y2', endPos.y);
-      line.classList.add('success');
+      line.classList.add('hidden'); // eliminate line
       document.getElementById('proceed3Btn').classList.remove('hidden');
     } else {
-      // Failed
-      line.classList.remove('drawing'); // hide line
-      if (elUnder && elUnder.closest('.map-item.decoy')) {
-        showWrongPickToast("— Not all paths lead home. —");
-      }
+      // Failed (released early or in empty space without reaching the bridge)
+      failDrawing();
     }
   };
 
